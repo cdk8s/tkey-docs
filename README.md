@@ -65,11 +65,11 @@ TKey 是我们团队的重点项目，为了更好地发展，我们决定一开
 
 ## Roadmap
 
-- [规划版本](server/roadmap/README.md)
+- [规划版本](roadmap/README.md)
 
 ## Changelog
 
-- [版本更新](server/changelog/README.md)
+- [版本更新](changelog/README.md)
 
 ## Issues
 
