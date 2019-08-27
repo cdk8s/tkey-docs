@@ -1,0 +1,756 @@
+{
+	"info": {
+		"_postman_id": "be664928-7ed2-41c3-994e-da8b4adde66a",
+		"name": "tkey-sso-server-api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "tkey-sso-client-rest-demo",
+			"item": [
+				{
+					"name": "通用",
+					"item": [
+						{
+							"name": "刷新token",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/x-www-form-urlencoded"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "grant_type",
+											"value": "refresh_token",
+											"type": "text"
+										},
+										{
+											"key": "refresh_token",
+											"value": "RT-103-8aI3zHbArcmzT3ukHlBQ88AdMv2NB8Aa",
+											"type": "text"
+										},
+										{
+											"key": "client_id",
+											"value": "test_client_id_1",
+											"type": "text"
+										},
+										{
+											"key": "client_secret",
+											"value": "test_client_secret_1",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://sso.cdk8s.com:9091/sso/oauth/token",
+									"protocol": "http",
+									"host": [
+										"sso",
+										"cdk8s",
+										"com"
+									],
+									"port": "9091",
+									"path": [
+										"sso",
+										"oauth",
+										"token"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "校验 AccessToken",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/x-www-form-urlencoded"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "client_id",
+											"value": "test_client_id_1",
+											"type": "text"
+										},
+										{
+											"key": "client_secret",
+											"value": "test_client_secret_1",
+											"type": "text"
+										},
+										{
+											"key": "token",
+											"value": "AT-102-dJTLEsFLR2PbxU1l8GPx3CUS9O3Lhzdn",
+											"type": "text"
+										},
+										{
+											"key": "token_type_hint",
+											"value": "access_token",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://sso.cdk8s.com:9091/sso/oauth/introspect",
+									"protocol": "http",
+									"host": [
+										"sso",
+										"cdk8s",
+										"com"
+									],
+									"port": "9091",
+									"path": [
+										"sso",
+										"oauth",
+										"introspect"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "校验 RefreshToken",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/x-www-form-urlencoded"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "client_id",
+											"value": "test_client_id_1",
+											"type": "text"
+										},
+										{
+											"key": "client_secret",
+											"value": "test_client_secret_1",
+											"type": "text"
+										},
+										{
+											"key": "token",
+											"value": "RT-103-8aI3zHbArcmzT3ukHlBQ88AdMv2NB8Aa",
+											"type": "text"
+										},
+										{
+											"key": "token_type_hint",
+											"value": "refresh_token",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://sso.cdk8s.com:9091/sso/oauth/introspect",
+									"protocol": "http",
+									"host": [
+										"sso",
+										"cdk8s",
+										"com"
+									],
+									"port": "9091",
+									"path": [
+										"sso",
+										"oauth",
+										"introspect"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "获取用户信息-POST",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/x-www-form-urlencoded"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "access_token",
+											"value": "RT-103-8aI3zHbArcmzT3ukHlBQ88AdMv2NB8Aa",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://sso.cdk8s.com:9091/sso/oauth/userinfo",
+									"protocol": "http",
+									"host": [
+										"sso",
+										"cdk8s",
+										"com"
+									],
+									"port": "9091",
+									"path": [
+										"sso",
+										"oauth",
+										"userinfo"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "获取用户信息-GET",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://sso.cdk8s.com:9091/sso/oauth/userinfo?access_token=AT-102-dJTLEsFLR2PbxU1l8GPx3CUS9O3Lhzdn",
+									"protocol": "http",
+									"host": [
+										"sso",
+										"cdk8s",
+										"com"
+									],
+									"port": "9091",
+									"path": [
+										"sso",
+										"oauth",
+										"userinfo"
+									],
+									"query": [
+										{
+											"key": "access_token",
+											"value": "AT-102-dJTLEsFLR2PbxU1l8GPx3CUS9O3Lhzdn"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "登出",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://sso.cdk8s.com:9091/sso/oauth/logout?redirect_uri=http://www.gitnavi.com",
+									"protocol": "http",
+									"host": [
+										"sso",
+										"cdk8s",
+										"com"
+									],
+									"port": "9091",
+									"path": [
+										"sso",
+										"oauth",
+										"logout"
+									],
+									"query": [
+										{
+											"key": "redirect_uri",
+											"value": "http://www.gitnavi.com"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "0f576257-c509-4fba-8365-32522c551d70",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "fb396949-c6f8-4969-8823-c3361694741a",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "简化模式",
+					"item": [
+						{
+							"name": "1.简化模式（使用浏览器访问）",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://sso.cdk8s.com:9091/sso/oauth/authorize?response_type=token&client_id=test_client_id_1&redirect_uri=http://www.gitnavi.com",
+									"protocol": "http",
+									"host": [
+										"sso",
+										"cdk8s",
+										"com"
+									],
+									"port": "9091",
+									"path": [
+										"sso",
+										"oauth",
+										"authorize"
+									],
+									"query": [
+										{
+											"key": "response_type",
+											"value": "token"
+										},
+										{
+											"key": "client_id",
+											"value": "test_client_id_1"
+										},
+										{
+											"key": "redirect_uri",
+											"value": "http://www.gitnavi.com"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "2.用户名、密码提交（用户触发的请求）",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/x-www-form-urlencoded"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "username",
+											"value": "myname",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "123456",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://sso.cdk8s.com:9091/sso/oauth/authorize?response_type=token&client_id=test_client_id_1&redirect_uri=http://www.baidu.com",
+									"protocol": "http",
+									"host": [
+										"sso",
+										"cdk8s",
+										"com"
+									],
+									"port": "9091",
+									"path": [
+										"sso",
+										"oauth",
+										"authorize"
+									],
+									"query": [
+										{
+											"key": "response_type",
+											"value": "token"
+										},
+										{
+											"key": "client_id",
+											"value": "test_client_id_1"
+										},
+										{
+											"key": "redirect_uri",
+											"value": "http://www.baidu.com"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "密码模式",
+					"item": [
+						{
+							"name": "密码模式",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/x-www-form-urlencoded",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "grant_type",
+											"value": "password",
+											"type": "text"
+										},
+										{
+											"key": "client_id",
+											"value": "test_client_id_1",
+											"type": "text"
+										},
+										{
+											"key": "client_secret",
+											"value": "test_client_secret_1",
+											"type": "text"
+										},
+										{
+											"key": "username",
+											"value": "admin",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "123456",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://sso.cdk8s.com:9091/sso/oauth/token",
+									"protocol": "http",
+									"host": [
+										"sso",
+										"cdk8s",
+										"com"
+									],
+									"port": "9091",
+									"path": [
+										"sso",
+										"oauth",
+										"token"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "客户端模式",
+					"item": [
+						{
+							"name": "客户端模式-GET",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://sso.cdk8s.com:9091/sso/oauth/token?grant_type=client_credentials&client_id=test_client_id_1&client_secret=test_client_secret_1",
+									"protocol": "http",
+									"host": [
+										"sso",
+										"cdk8s",
+										"com"
+									],
+									"port": "9091",
+									"path": [
+										"sso",
+										"oauth",
+										"token"
+									],
+									"query": [
+										{
+											"key": "grant_type",
+											"value": "client_credentials"
+										},
+										{
+											"key": "client_id",
+											"value": "test_client_id_1"
+										},
+										{
+											"key": "client_secret",
+											"value": "test_client_secret_1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "客户端模式-POST",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/x-www-form-urlencoded",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "grant_type",
+											"value": "client_credentials",
+											"type": "text"
+										},
+										{
+											"key": "client_id",
+											"value": "test_client_id_1",
+											"type": "text"
+										},
+										{
+											"key": "client_secret",
+											"value": "test_client_secret_1",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://sso.cdk8s.com:9091/sso/oauth/token",
+									"protocol": "http",
+									"host": [
+										"sso",
+										"cdk8s",
+										"com"
+									],
+									"port": "9091",
+									"path": [
+										"sso",
+										"oauth",
+										"token"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "授权码模式",
+					"item": [
+						{
+							"name": "1.登录页面（使用浏览器访问）",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://sso.cdk8s.com:9091/sso/oauth/authorize?response_type=code&client_id=test_client_id_1&redirect_uri=http://test1.cdk8s.com:9094/client-rest/codeCallback/aHR0cDovL3Rlc3QxLmNkazhzLmNvbTo5MzkzL2NsaWVudC1zY3JpYmVqYXZhL3VzZXI_aWQ9MTIzNDU2Jm5hbWU9Y2RrOHM",
+									"protocol": "http",
+									"host": [
+										"sso",
+										"cdk8s",
+										"com"
+									],
+									"port": "9091",
+									"path": [
+										"sso",
+										"oauth",
+										"authorize"
+									],
+									"query": [
+										{
+											"key": "response_type",
+											"value": "code"
+										},
+										{
+											"key": "client_id",
+											"value": "test_client_id_1"
+										},
+										{
+											"key": "redirect_uri",
+											"value": "http://test1.cdk8s.com:9094/client-rest/codeCallback/aHR0cDovL3Rlc3QxLmNkazhzLmNvbTo5MzkzL2NsaWVudC1zY3JpYmVqYXZhL3VzZXI_aWQ9MTIzNDU2Jm5hbWU9Y2RrOHM"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "2.用户名、密码提交（用户触发的请求）",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/x-www-form-urlencoded"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "username",
+											"value": "myname",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "123456",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://sso.cdk8s.com:9091/sso/oauth/authorize?response_type=code&client_id=test_client_id_1&redirect_uri=http://test1.cdk8s.com:9094/client-rest/codeCallback/aHR0cDovL3Rlc3QxLmNkazhzLmNvbTo5MzkzL2NsaWVudC1zY3JpYmVqYXZhL3VzZXI_aWQ9MTIzNDU2Jm5hbWU9Y2RrOHM",
+									"protocol": "http",
+									"host": [
+										"sso",
+										"cdk8s",
+										"com"
+									],
+									"port": "9091",
+									"path": [
+										"sso",
+										"oauth",
+										"authorize"
+									],
+									"query": [
+										{
+											"key": "response_type",
+											"value": "code"
+										},
+										{
+											"key": "client_id",
+											"value": "test_client_id_1"
+										},
+										{
+											"key": "redirect_uri",
+											"value": "http://test1.cdk8s.com:9094/client-rest/codeCallback/aHR0cDovL3Rlc3QxLmNkazhzLmNvbTo5MzkzL2NsaWVudC1zY3JpYmVqYXZhL3VzZXI_aWQ9MTIzNDU2Jm5hbWU9Y2RrOHM"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "3.code 换取 token",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/x-www-form-urlencoded"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "grant_type",
+											"value": "authorization_code",
+											"type": "text"
+										},
+										{
+											"key": "code",
+											"value": "OC-101-b2XiPTubgiOkyNYlM9n48XvoVIY9BxtF",
+											"type": "text"
+										},
+										{
+											"key": "redirect_uri",
+											"value": "http://test1.cdk8s.com:9094/client-rest/codeCallback/aHR0cDovL3Rlc3QxLmNkazhzLmNvbTo5MzkzL2NsaWVudC1zY3JpYmVqYXZhL3VzZXI_aWQ9MTIzNDU2Jm5hbWU9Y2RrOHM",
+											"type": "text"
+										},
+										{
+											"key": "client_id",
+											"value": "test_client_id_1",
+											"type": "text"
+										},
+										{
+											"key": "client_secret",
+											"value": "test_client_secret_1",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://sso.cdk8s.com:9091/sso/oauth/token",
+									"protocol": "http",
+									"host": [
+										"sso",
+										"cdk8s",
+										"com"
+									],
+									"port": "9091",
+									"path": [
+										"sso",
+										"oauth",
+										"token"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "其他",
+					"item": [
+						{
+							"name": "Actuator-修改 log 输出级别",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"configuredLevel\": \"INFO\"}"
+								},
+								"url": {
+									"raw": "http://sso.cdk8s.com:19091/tkey-actuator/actuator/loggers/com.cdk8s",
+									"protocol": "http",
+									"host": [
+										"sso",
+										"cdk8s",
+										"com"
+									],
+									"port": "19091",
+									"path": [
+										"tkey-actuator",
+										"actuator",
+										"loggers",
+										"com.cdk8s"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				}
+			]
+		}
+	]
+}
