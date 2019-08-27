@@ -3,6 +3,7 @@
 
 - Github：<https://github.com/cdk8s/tkey-docs>
 - Gitee：<https://gitee.com/cdk8s/tkey-docs>
+- Gitbook：<https://160668873.gitbook.io/tkey-docs/>
 
 ## Hosts
 
