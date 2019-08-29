@@ -17,6 +17,12 @@
 127.0.0.1 management-frontend.cdk8s.com
 ```
 
+## Architecture
+
+![架构图](http://img.gitnavi.com/tkey/tkey-sso-architecture.jpg)
+
+- 上图的视频讲解：[B 站](https://www.bilibili.com/video/av65883281/)、[腾讯视频](https://v.qq.com/x/page/e0920wdqe7v.html)
+- OAuth2.0 授权码模式细节时序图可以查看：[点击我查看](http://img.gitnavi.com/tkey/tkey-oauth.png)
 
 ## Documentation
 
