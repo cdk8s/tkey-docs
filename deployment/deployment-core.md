@@ -12,6 +12,13 @@
 	- 重启防火墙：`firewall-cmd --reload`
 - CentOS 7 命令：`systemctl restart sshd.service`
 
+## 设置免密登录
+
+- 在 A 机器上输入命令：`ssh-keygen`
+	- 根据提示回车，共有三次交互提示，都回车即可。
+- 生成的密钥目录在：**/root/.ssh**
+- 写入：`cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys`
+- 测试：`ssh localhost`
 
 ## 安装 ansible
 
