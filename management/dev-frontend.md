@@ -1,10 +1,7 @@
 
 ## TKey Client Management 开发环境
 
-- macOS High Sierra 10.13.6 
-- Node 10.14.2
-- npm 6.4.1
-- Yarn 1.12.3
+- [参考 TKey SSO Server 环境](https://github.com/cdk8s/tkey-docs/blob/master/server/dev.md)
 
 ## TKey Client Management 项目核心组件版本
 

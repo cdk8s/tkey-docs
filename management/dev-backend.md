@@ -1,11 +1,11 @@
 
 ## TKey Client Management 开发环境
 
-- [参考 TKey SSO Server 环境]()
+- [参考 TKey SSO Server 环境](https://github.com/cdk8s/tkey-docs/blob/master/server/dev.md)
 
 ## TKey Client Management 项目核心组件版本
 
-- [参考 TKey SSO Server 环境]()
+- [参考 TKey SSO Server 环境](https://github.com/cdk8s/tkey-docs/blob/master/server/dev.md)
 
 
 ## TKey Client Management Token 有效期设置

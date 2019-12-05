@@ -2,7 +2,8 @@
 # 生产提醒
 
 - 请不要轻视安全问题，这是一个永远永远都要放心上的问题
-- 请结合该篇一起阅读：[故意设计点（常见问题）]()
+- 请结合该篇一起阅读：
+    - 故意设计点（常见问题）：[Github](https://github.com/cdk8s/tkey-docs/blob/master/faq/README.md)、[Gitee](https://gitee.com/cdk8s/tkey-docs/blob/master/faq/README.md)
 
 ## 必备要求
 

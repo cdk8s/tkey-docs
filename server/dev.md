@@ -1,24 +1,31 @@
 
 ## TKey 开发环境
 
-- macOS High Sierra 10.13.6 
-- Oracle JDK 1.8.0_191
-- Maven 3.6.0
-- IntelliJ IDEA 2019.2
-- Redis 4（Docker Image）
-- Prometheus 2.11（Docker Image）
-- Grafana 6.2.5（Docker Image）
-- MySQL 5.7（Docker Image）
-- Postman 7.5.0
-- JMeter 5.1.1
-- Jenkins 2.176.2
-- JProfiler 11.0.1
-- Docker version 18.09.2
-    - Docker Desktop 2.0.0.3
+- 系统环境
+    - macOS High Sierra 10.13.6
+- 后端
+    - IntelliJ IDEA 2019.2
+    - Oracle JDK 1.8.0_191
+    - Maven 3.6.1
+    - Redis 4（Docker Image）
+    - Prometheus 2.11（Docker Image）
+    - Grafana 6.2.5（Docker Image）
+    - MySQL 5.7（Docker Image）
+    - Postman 7.5.0
+    - JMeter 5.1.1
+    - Jenkins 2.176.2
+    - JProfiler 11.0.1
+    - Docker version 18.09.2
+        - Docker Desktop 2.0.0.3
+- 前端
+    - WebStorm 2019.2
+    - Node 10.14.2
+    - npm 6.4.1
+    - Yarn 1.12.3
 
 ## TKey 项目核心组件版本（版本号 pom.xml 为准）
 
-- 依赖包完整列表 [pom.xml]()
+- 依赖包完整列表 [pom.xml](https://github.com/cdk8s/tkey/blob/master/pom.xml)
 - 核心：`Spring Boot 2.1.7.RELEASE`
 - 其他（后续以 pom.xml 文件为主）：
 
@@ -59,7 +66,9 @@
 
 - 在 OauthController.java 类中
 - 这里采用的是 REST API 校验，如果你们要直连数据库，可以在改写该逻辑
-- 至于为什么要这么设计，已经在 [故意设计点（常见问题）]() 进行了说明
+- 至于为什么要这么设计，已经在下面文章进行了说明
+    - 故意设计点（常见问题）：[Github](https://github.com/cdk8s/tkey-docs/blob/master/faq/README.md)、[Gitee](https://gitee.com/cdk8s/tkey-docs/blob/master/faq/README.md)
+
 
 ```
 OauthUserAttribute oauthUserAttribute = requestLoginApi(oauthFormLoginParam);
