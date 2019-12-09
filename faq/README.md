@@ -177,6 +177,24 @@ OAuth 很核心的点就是 scope，但是我在这个版本没有考虑。因�
 但是这里有一个小细节，如果使用我们的 TKey Client，则 `enable-code-callback-to-front: true` 必须是 true。表示 code 的回调在前端接收，然后前端再交给业务后端去调用 TKey，不然整个过程，你前端与后端是没有任何交流的，也就拿不到最后业务后端的 Token。所以才有这一步的设计。但是我个人觉得不够优雅，如果大家有跟优雅的方式，赶紧联系我们~
 
 
+## 密码模式的常用场景分析
+
+- 默认是采用授权码模式，要来回跳转。虽然这样会安全一点，但是有些环境可能不需要那么安全，只要方便就行，比如小程序、APP 那我推荐使用密码模式。
+- 假设场景如下
+    - 这类前端一般都有自己的登录页面，用户输入账号密码后，直接请求 TKey Server，TKey 直接返回 JSON 信息给前端，前端可以存储到 Session Storage 中。
+- 这时候后端就有两种场景：
+    - 有带 API 网关
+        - 有带 API 网关最为简单，API 网关拿到 Access Token 发现自己的 Redis 中不存在该 Token 就会去找 TKey Server 求证，如果是有效的，则存储 Token 以及相应的用户信息到自己的 Redis 中
+        - 存储完成后，放行请求，后面的请求会因为网关 Redis 已经存在了该 Token，所以也就省去再去找 TKey Server 求证
+    - 没带 API 网关
+        - 没带 API 网关相对于有带 API 网关的差别，在于每个业务系统的 Redis 也都必须先存储后放行
+        - 如果是小公司，全部公司就一个 Redis，那你就爽了，直连查询。但是这种粗暴的方式也带来隐患，如果出了生产事故，不知道算谁的责任。
+- 需要小改动的地方：
+    - 在 API 网关或业务系统的登录拦截器中 LoginInterceptor.java 多加一个判断：如果本业务 Redis 中没有存储该 Token，则求证 TKey Server
+    - 如果 Token 有效，则存储 Token 和用户信息到本业务的 Redis 中
+    - tkey-sso-client-starter-rest.jar 在 1.0.2 版本之后提供了方法：TkeyService.getUserProfile(accessToken)
+
+
 ## 刷新 Token 如何使用
 
 如果你们的业务系统都是在 PC 上，那其实我觉得可以不考虑，因为 TGC 的有效期很长，特别是勾选了记住我之后，默认有 7 天的时间，在这个过程中，只要用户不清除缓存、Cookie，则每次访问业务系统都会生成新的 AccessToken。
