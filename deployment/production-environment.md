@@ -25,7 +25,7 @@
 - 在 TKey Server 中有一个类：`ApplicationTestDataInitRunner.java` 会在本地开发环境、测试环境生成一个测试专用的 Client
 - 如果你已经准备上对外测试、生产记得梳理下 Client 的管理。默认是应该在 TKey Management 项目中进行管理 Client，而 TKey Server 只是读取 Client
 - TKey Management 中也有一个类：`ApplicationTestDataInitRunner.java` 会在本地开发环境、测试环境启动的时候读取 H2 数据库，初始化 Client 到 Redis 中
-
+- 以上两个人类都没有强加在 Prod 环境，担心开发者无意识地操作，造成生产事故，所以大家如果需要这个初始化，需要自己评估，并且开启在 Prod 环境下
 
 
 
