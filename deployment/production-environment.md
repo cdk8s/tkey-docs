@@ -20,6 +20,11 @@
 6. 增加异地登入审查
 6. 分析异常登入记录
 
+## 关于 Client 信息管理
+
+- 在 TKey Server 中有一个类：`ApplicationTestDataInitRunner.java` 会在本地开发环境、测试环境生成一个测试专用的 Client
+- 如果你已经准备上对外测试、生产记得梳理下 Client 的管理。默认是应该在 TKey Management 项目中进行管理 Client，而 TKey Server 只是读取 Client
+- TKey Management 中也有一个类：`ApplicationTestDataInitRunner.java` 会在本地开发环境、测试环境启动的时候读取 H2 数据库，初始化 Client 到 Redis 中
 
 
 
