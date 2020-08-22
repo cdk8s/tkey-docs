@@ -652,8 +652,14 @@ http {
   default_type        application/octet-stream;
 
   sendfile on;
-
   keepalive_timeout   65;
+
+  gzip on;
+  gzip_buffers 8 16k;
+  gzip_min_length 512;
+  gzip_disable "MSIE [1-6]\.(?!.*SV1)";
+  gzip_http_version 1.1;
+  gzip_types   text/plain text/css application/javascript application/x-javascript application/json application/xml;
 
   server {
     listen            80;
