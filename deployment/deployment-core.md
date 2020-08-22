@@ -114,6 +114,19 @@ ansible all -a 'ps'
 
 - 执行：`ansible-playbook /opt/install-basic-playbook.yml`
 
+## Docker 镜像源
+
+- `vim /etc/docker/daemon.json`，增加如下内容：
+ 
+``` bash
+{
+  "registry-mirrors": ["https://ldhc17y9.mirror.aliyuncs.com"]
+}
+```
+ 
+- `sudo systemctl daemon-reload`
+- `sudo systemctl restart docker`
+
 
 ## 离线安装 jdk
 
