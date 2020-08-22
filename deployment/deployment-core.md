@@ -456,12 +456,13 @@ mkdir -p /data/docker/mysql/datadir /data/docker/mysql/conf /data/docker/mysql/l
 创建配置文件：
 vim /data/docker/mysql/conf/mysql-1.cnf
 
-
+# 该编码设置是我自己配置的
 [mysql]
 default-character-set = utf8mb4
 
 # 下面内容是 docker mysql 默认的 start
 [mysqld]
+max_connections = 500
 pid-file = /var/run/mysqld/mysqld.pid
 socket = /var/run/mysqld/mysqld.sock
 datadir = /var/lib/mysql
@@ -478,8 +479,15 @@ default-storage-engine = InnoDB
 collation-server = utf8mb4_unicode_520_ci
 init_connect = 'SET NAMES utf8mb4'
 character-set-server = utf8mb4
+# 表名大小写敏感 0 是区分大小写，1 是不分区，全部采用小写
 lower_case_table_names = 1
 max_allowed_packet = 50M
+sql_mode=STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION
+
+# 避免在 dump 命令中加上密码后提示：Using a password on the command line interface can be insecure
+[mysqldump]
+user=root
+password=123456
 ```
 
 ```
