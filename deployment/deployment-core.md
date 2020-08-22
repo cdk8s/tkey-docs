@@ -1075,7 +1075,14 @@ http {
 
     location /tkey-test {
         return 601;
-    }    
+    }
+
+    location ^~ /upload {
+        root    /home/root/sculptor-boot-backend-upload-dir;
+        autoindex on;
+        autoindex_exact_size off;
+        autoindex_localtime on;
+    }
 
     # 需要创建目录 /data/html/tkey-sso-client-management-frontend，里面存放 index.html 等静态文件
     location ^~ /tkey-sso-client-management-frontend/ {
