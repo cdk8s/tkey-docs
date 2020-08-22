@@ -1032,6 +1032,7 @@ goaccess -f /data/docker/nginx/logs/access.log --geoip-database=/opt/GeoLite2-Ci
 
 ## Nginx 最终配置
 
+- 因为 nginx 在 docker 里面，所以不能用 127.0.0.1
 
 ```
 配置文件：
