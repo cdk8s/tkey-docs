@@ -96,7 +96,7 @@ ansible all -a 'ps'
       shell: "{{ item }}"
       with_items:
          - yum install -y yum-utils device-mapper-persistent-data lvm2
-         - yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+         - yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
          - yum makecache fast
          - yum install -y docker-ce docker-ce-cli containerd.io
          - systemctl start docker.service
@@ -105,13 +105,14 @@ ansible all -a 'ps'
     - name: install-docker-compose
       shell: "{{ item }}"
       with_items:
-         - curl -L "https://github.com/docker/compose/releases/download/1.26.2/docker-compose-Linux-x86_64" -o /usr/local/bin/docker-compose
+         - curl -L https://get.daocloud.io/docker/compose/releases/download/1.26.2/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
          - chmod +x /usr/local/bin/docker-compose
          - docker-compose --version
          - systemctl restart docker.service
          - systemctl enable docker.service
 ```
 
+- docker compose 最新版本好可以看：<https://docs.docker.com/compose/install/#install-compose-on-linux-systems>
 - 执行：`ansible-playbook /opt/install-basic-playbook.yml`
 
 ## Docker 镜像源
@@ -120,7 +121,12 @@ ansible all -a 'ps'
  
 ``` bash
 {
-  "registry-mirrors": ["https://ldhc17y9.mirror.aliyuncs.com"]
+  "registry-mirrors": [
+    "https://ldhc17y9.mirror.aliyuncs.com",
+    "https://hub-mirror.c.163.com",
+    "https://mirror.baidubce.com",
+    "https://docker.mirrors.ustc.edu.cn"
+  ]
 }
 ```
  
