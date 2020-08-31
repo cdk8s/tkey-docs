@@ -50,7 +50,7 @@ ansible all -a 'ps'
     - zsh vim
     - docker docker-compose
 
-- 创建脚本文件：`vim /opt/install-basic-playbook.yml`
+- 创建脚本文件：`vim /opt/1-install-basic-playbook.yml`
 
 ```
 - hosts: all
@@ -79,11 +79,10 @@ ansible all -a 'ps'
       with_items:
          - yum install -y zip unzip lrzsz git wget htop deltarpm
          
-    - name: install-zsh
+    - name: install zsh oh-my-zsh
       shell: "{{ item }}"
       with_items:
          - yum install -y zsh
-         - wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O - | sh
          - chsh -s /bin/zsh root
          
     - name: install-vim
@@ -100,16 +99,6 @@ ansible all -a 'ps'
          - yum makecache fast
          - yum install -y docker-ce docker-ce-cli containerd.io
          - systemctl start docker.service
-         - docker run hello-world
-         
-    - name: install-docker-compose
-      shell: "{{ item }}"
-      with_items:
-         - curl -L https://get.daocloud.io/docker/compose/releases/download/1.26.2/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
-         - chmod +x /usr/local/bin/docker-compose
-         - docker-compose --version
-         - systemctl restart docker.service
-         - systemctl enable docker.service
 
     - name: create /etc/docker directory
       file:
@@ -143,10 +132,19 @@ ansible all -a 'ps'
       with_items:
          - systemctl daemon-reload
          - systemctl restart docker
+
+    - name: install-docker-compose
+      shell: "{{ item }}"
+      with_items:
+         - curl -L https://get.daocloud.io/docker/compose/releases/download/1.26.2/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+         - chmod +x /usr/local/bin/docker-compose
+         - docker-compose --version
+         - systemctl restart docker.service
+         - systemctl enable docker.service
 ```
 
 - docker compose 最新版本好可以看：<https://docs.docker.com/compose/install/#install-compose-on-linux-systems>
-- 执行：`ansible-playbook /opt/install-basic-playbook.yml`
+- 执行：`ansible-playbook /opt/1-install-basic-playbook.yml`
 
 ## 离线安装 jdk
 
@@ -191,6 +189,7 @@ ansible all -a 'ps'
       file:
         state: absent
         path: "{{ java_install_folder }}/{{ file_name }}" 
+
 ```
 
 
@@ -201,7 +200,7 @@ ansible all -a 'ps'
 ## 安装 maven
 
 
-- 下载 maven 到 /opt 目录下：`wget http://mirrors.tuna.tsinghua.edu.cn/apache/maven/maven-3/3.6.1/binaries/apache-maven-3.6.1-bin.zip`
+- 把 maven 放到 /opt 目录下
 - 创建脚本文件：`vim /opt/maven-playbook.yml`
 
 ```
@@ -363,8 +362,15 @@ ansible all -a 'ps'
 - hosts: all
   remote_user: root
   tasks:
-    - name: uninstall-node
-      shell: yum remove -y nodejs npm
+    - name: remove the nodejs 
+      yum:
+        name: nodejs
+        state: absent
+
+    - name: remove the npm 
+      yum:
+        name: npm
+        state: absent
 
     - name: curl node
       shell: "curl --silent --location https://rpm.nodesource.com/setup_12.x | sudo bash -"
@@ -385,6 +391,15 @@ ansible all -a 'ps'
 
 
 - 执行命令：`ansible-playbook /opt/node-playbook.yml`
+
+## 安装原生 MySQL 5.7
+
+## 安装原生 Redis 5
+
+
+
+
+
 
 ## 安装 Jenkins
 
