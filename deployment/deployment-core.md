@@ -60,7 +60,7 @@ ansible all -a 'ps'
         state: disabled
         
     - name: disable firewalld
-      command: "{{ item }}"
+      shell: "{{ item }}"
       with_items:
          - systemctl stop firewalld
          - systemctl disable firewalld
@@ -69,12 +69,12 @@ ansible all -a 'ps'
          - sysctl -w vm.swappiness=0
          
     - name: install-epel
-      command: "{{ item }}"
+      shell: "{{ item }}"
       with_items:
          - yum install -y epel-release
          
     - name: install-basic
-      command: "{{ item }}"
+      shell: "{{ item }}"
       with_items:
          - yum install -y zip unzip lrzsz git wget htop deltarpm
 
@@ -188,8 +188,7 @@ ansible all -a 'ps'
     - name: remove tar.gz file
       file:
         state: absent
-        path: "{{ java_install_folder }}/{{ file_name }}" 
-
+        path: "{{ java_install_folder }}/{{ file_name }}"
 ```
 
 
@@ -201,7 +200,7 @@ ansible all -a 'ps'
 
 
 - 把 maven 放到 /opt 目录下
-- 创建脚本文件：`vim /opt/maven-playbook.yml`
+- 创建脚本文件：`vim /opt/3-maven-playbook.yml`
 
 ```
 - hosts: all
@@ -251,12 +250,12 @@ ansible all -a 'ps'
 
     - name: remove old settings.xml
       file:
-        path: {{ maven_install_folder }}/apache-maven-3.6.3/conf/settings.xml
+        path: "{{ maven_install_folder }}/apache-maven-3.6.3/conf/settings.xml"
         state: absent
 
     - name: create settings.xml file
       file: 
-        path={{ maven_install_folder }}/apache-maven-3.6.3/conf/{{ item }}
+        path="{{ maven_install_folder }}/apache-maven-3.6.3/conf/{{ item }}"
         state=touch
         mode=777
       with_items:
@@ -264,7 +263,7 @@ ansible all -a 'ps'
 
     - name: set settings.xml aliyun
       blockinfile: 
-        path: {{ maven_install_folder }}/apache-maven-3.6.3/conf/settings.xml
+        path: "{{ maven_install_folder }}/apache-maven-3.6.3/conf/settings.xml"
         marker: ""
         block: |
           <?xml version="1.0" encoding="UTF-8"?>
@@ -346,17 +345,15 @@ ansible all -a 'ps'
               </activeProfiles>
           
           </settings>
-
 ```
 
 
-- 执行命令：`ansible-playbook /opt/maven-playbook.yml`
-
+- 执行命令：`ansible-playbook /opt/3-maven-playbook.yml`
 
 
 ## 安装 node
 
-- 创建脚本文件：`vim /opt/node-playbook.yml`
+- 创建脚本文件：`vim /opt/4-node-playbook.yml`
 
 ```
 - hosts: all
@@ -376,7 +373,7 @@ ansible all -a 'ps'
       shell: "curl --silent --location https://rpm.nodesource.com/setup_12.x | sudo bash -"
       
     - name: install node
-      command: "{{ item }}"
+      shell: "{{ item }}"
       with_items:
          - yum -y install nodejs
 
@@ -384,22 +381,181 @@ ansible all -a 'ps'
       shell: "curl --silent --location https://dl.yarnpkg.com/rpm/yarn.repo | sudo tee /etc/yum.repos.d/yarn.repo"
           
     - name: install yarn
-      command: "{{ item }}"
+      shell: "{{ item }}"
       with_items:
          - yum -y install yarn
 ```
 
 
-- 执行命令：`ansible-playbook /opt/node-playbook.yml`
+- 执行命令：`ansible-playbook /opt/4-node-playbook.yml`
 
-## 安装原生 MySQL 5.7
+## 安装原生 MySQL 5.7（可选 Docker）
 
-## 安装原生 Redis 5
+- 创建脚本文件：`vim /opt/5-mysql-playbook.yml`
+
+```
+- hosts: all
+  remote_user: root
+  tasks:
+    - name: remove the mariadb 
+      yum:
+        name: mariadb
+        state: absent
+
+    - name: install mysql 1
+      shell: "{{ item }}"
+      with_items:
+         - wget http://dev.mysql.com/get/mysql57-community-release-el7-11.noarch.rpm
+         - yum localinstall -y mysql57-community-release-el7-11.noarch.rpm
+
+    - name: install mysql 2
+      yum:
+        name: mysql-community-server
+
+    - name: remove old /etc/my.cnf
+      file:
+        path: "/etc/my.cnf"
+        state: absent
+
+    - name: create my.cnf file
+      file: 
+        path="/etc/{{ item }}"
+        state=touch
+        mode=777
+      with_items:
+        - my.cnf
+
+    - name: set my.cnf
+      blockinfile: 
+        path: /etc/my.cnf
+        marker: ""
+        block: |
+            [mysql]
+            default-character-set = utf8mb4
+            [mysqld]
+            max_connections = 500
+            datadir = /var/lib/mysql
+            socket = /var/lib/mysql/mysql.sock
+            bind-address = 127.0.0.1
+            symbolic-links=0
+            log-error=/var/log/mysqld.log
+            pid-file=/var/run/mysqld/mysqld.pid
+            default-storage-engine = InnoDB
+            collation-server = utf8mb4_unicode_520_ci
+            init_connect = 'SET NAMES utf8mb4'
+            character-set-server = utf8mb4
+            lower_case_table_names = 1
+            max_allowed_packet = 50M
+            sql_mode=STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION
+
+    - name: enable mysql
+      shell: "{{ item }}"
+      with_items:
+         - systemctl enable mysqld.service
+         - systemctl restart mysqld.service
+```
+
+- 执行命令：`ansible-playbook /opt/5-mysql-playbook.yml`
 
 
 
+## 安装原生 Redis 5（可选 Docker）
 
 
+
+- 创建脚本文件：`vim /opt/6-redis-playbook.yml`
+
+```
+- hosts: all
+  remote_user: root
+  tasks:
+    - name: install redis
+      yum:
+        name: redis
+
+    - name: remove old /etc/redis.conf
+      file:
+        path: "/etc/redis.conf"
+        state: absent
+
+    - name: create /etc/redis.conf file
+      file: 
+        path="/etc/{{ item }}"
+        state=touch
+        mode=777
+      with_items:
+        - redis.conf
+
+    - name: set redis.conf
+      blockinfile: 
+        path: /etc/redis.conf
+        marker: ""
+        block: |
+            bind 0.0.0.0
+            requirepass adgredis123456
+            protected-mode yes
+            port 6379
+            tcp-backlog 511
+            timeout 0
+            tcp-keepalive 300
+            daemonize no
+            supervised no
+            pidfile /var/run/redis_6379.pid
+            loglevel notice
+            logfile /var/log/redis/redis.log
+            databases 16
+            save 900 1
+            save 300 10
+            save 60 10000
+            stop-writes-on-bgsave-error yes
+            rdbcompression yes
+            rdbchecksum yes
+            dbfilename dump.rdb
+            dir /var/lib/redis
+            slave-serve-stale-data yes
+            slave-read-only yes
+            repl-diskless-sync no
+            repl-diskless-sync-delay 5
+            repl-disable-tcp-nodelay no
+            slave-priority 100
+            appendonly no
+            appendfilename "appendonly.aof"
+            appendfsync everysec
+            no-appendfsync-on-rewrite no
+            auto-aof-rewrite-percentage 100
+            auto-aof-rewrite-min-size 64mb
+            aof-load-truncated yes
+            lua-time-limit 5000
+            slowlog-log-slower-than 10000
+            slowlog-max-len 128
+            latency-monitor-threshold 0
+            notify-keyspace-events ""
+            hash-max-ziplist-entries 512
+            hash-max-ziplist-value 64
+            list-max-ziplist-size -2
+            list-compress-depth 0
+            set-max-intset-entries 512
+            zset-max-ziplist-entries 128
+            zset-max-ziplist-value 64
+            hll-sparse-max-bytes 3000
+            activerehashing yes
+            client-output-buffer-limit normal 0 0 0
+            client-output-buffer-limit slave 256mb 64mb 60
+            client-output-buffer-limit pubsub 32mb 8mb 60
+            hz 10
+            aof-rewrite-incremental-fsync yes
+
+    - name: enable redis
+      shell: "{{ item }}"
+      with_items:
+         - systemctl enable redis
+         - systemctl restart redis
+```
+
+- 执行命令：`ansible-playbook /opt/6-redis-playbook.yml`
+
+
+-------------------------------------------------------------------
 
 ## 安装 Jenkins
 
