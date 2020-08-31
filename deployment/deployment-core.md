@@ -12,6 +12,21 @@
 	- 重启防火墙：`firewall-cmd --reload`
 - CentOS 7 命令：`systemctl restart sshd.service`
 
+
+## 安装后的检测
+
+```
+docker --version
+docker-compose --version
+java -version
+mvn -v
+mysql --version
+redis-server --version
+node -v
+npm -v
+```
+
+
 ## 设置免密登录
 
 - 在 A 机器上输入命令：`ssh-keygen`
