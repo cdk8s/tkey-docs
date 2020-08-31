@@ -110,29 +110,43 @@ ansible all -a 'ps'
          - docker-compose --version
          - systemctl restart docker.service
          - systemctl enable docker.service
+
+    - name: create /etc/docker directory
+      file:
+        path: /etc/docker
+        state: directory
+
+    - name: create daemon.json file
+      file: 
+        path=/etc/docker/{{ item }}
+        state=touch
+        mode=777
+      with_items:
+        - daemon.json
+
+    - name: set docker registry mirrors
+      blockinfile: 
+        path: /etc/docker/daemon.json
+        marker: ""
+        block: |
+          {
+            "registry-mirrors": [
+              "https://ldhc17y9.mirror.aliyuncs.com",
+              "https://hub-mirror.c.163.com",
+              "https://mirror.baidubce.com",
+              "https://docker.mirrors.ustc.edu.cn"
+            ]
+          }
+
+    - name: restart docekr
+      shell: "{{ item }}"
+      with_items:
+         - systemctl daemon-reload
+         - systemctl restart docker
 ```
 
 - docker compose 最新版本好可以看：<https://docs.docker.com/compose/install/#install-compose-on-linux-systems>
 - 执行：`ansible-playbook /opt/install-basic-playbook.yml`
-
-## Docker 镜像源
-
-- `vim /etc/docker/daemon.json`，增加如下内容：
- 
-``` bash
-{
-  "registry-mirrors": [
-    "https://ldhc17y9.mirror.aliyuncs.com",
-    "https://hub-mirror.c.163.com",
-    "https://mirror.baidubce.com",
-    "https://docker.mirrors.ustc.edu.cn"
-  ]
-}
-```
- 
-- `sudo systemctl daemon-reload`
-- `sudo systemctl restart docker`
-
 
 ## 离线安装 jdk
 
@@ -144,20 +158,24 @@ ansible all -a 'ps'
   remote_user: root
   vars:
     java_install_folder: /usr/local
-    file_name: jdk-8u212-linux-x64.tar.gz
+    file_name: jdk-8u261-linux-x64.tar.gz
   tasks:
     - name: copy jdk
-      copy: src=/opt/{{ file_name }} dest={{ java_install_folder }}
+      copy: 
+        src=/opt/{{ file_name }}
+        dest={{ java_install_folder }}
       
     - name: tar jdk
-      shell: chdir={{ java_install_folder }} tar zxf {{ file_name }}
+      shell: 
+        chdir={{ java_install_folder }}
+        tar zxf {{ file_name }}
       
     - name: set JAVA_HOME
       blockinfile: 
         path: /root/.zshrc
         marker: "#{mark} JDK ENV"
         block: |
-          JAVA_HOME={{ java_install_folder }}/jdk1.8.0_212
+          JAVA_HOME={{ java_install_folder }}/jdk1.8.0_261
           JRE_HOME=$JAVA_HOME/jre
           PATH=$PATH:$JAVA_HOME/bin
           CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
@@ -169,7 +187,7 @@ ansible all -a 'ps'
     - name: source zshrc
       shell: source /root/.zshrc
          
-    - name: Clean file
+    - name: remove tar.gz file
       file:
         state: absent
         path: "{{ java_install_folder }}/{{ file_name }}" 
@@ -191,24 +209,30 @@ ansible all -a 'ps'
   remote_user: root
   vars:
     maven_install_folder: /usr/local
-    file_name: apache-maven-3.6.1-bin.zip
+    file_name: apache-maven-3.6.3-bin.zip
   tasks:
     - name: copy maven
-      copy: src=/opt/{{ file_name }} dest={{ maven_install_folder }}
+      copy: 
+        src=/opt/{{ file_name }}
+        dest={{ maven_install_folder }}
       
     - name: unzip maven
-      shell: chdir={{ maven_install_folder }} unzip {{ file_name }}
+      shell: 
+        chdir={{ maven_install_folder }}
+        unzip {{ file_name }}
       
     - name: set MAVEN_HOME
       blockinfile: 
         path: /root/.zshrc
         marker: "#{mark} MAVEN ENV"
         block: |
-            MAVEN_HOME={{ maven_install_folder }}/apache-maven-3.6.1
-            M3_HOME={{ maven_install_folder }}/apache-maven-3.6.1
+            MAVEN_HOME={{ maven_install_folder }}/apache-maven-3.6.3
+            M3_HOME={{ maven_install_folder }}/apache-maven-3.6.3
+            M2_HOME={{ maven_install_folder }}/apache-maven-3.6.3
             PATH=$PATH:$M3_HOME/bin
             MAVEN_OPTS="-Xms256m -Xmx356m"
             export M3_HOME
+            export M2_HOME
             export MAVEN_HOME
             export PATH
             export MAVEN_OPTS
@@ -216,7 +240,7 @@ ansible all -a 'ps'
     - name: source zshrc
       shell: source /root/.zshrc
          
-    - name: Clean file
+    - name: remove zip file
       file:
         state: absent
         path: "{{ maven_install_folder }}/{{ file_name }}" 
