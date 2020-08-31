@@ -89,7 +89,7 @@ ansible all -a 'ps'
       shell: "{{ item }}"
       with_items:
          - yum install -y vim
-         - curl https://raw.githubusercontent.com/wklken/vim-for-server/master/vimrc > ~/.vimrc
+         - curl https://gitee.com/cdk8s_org/vim-for-server/raw/master/vimrc > ~/.vimrc
          
     - name: install-docker
       shell: "{{ item }}"
