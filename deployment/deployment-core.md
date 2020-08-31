@@ -149,7 +149,7 @@ ansible all -a 'ps'
 ## 离线安装 jdk
 
 - 下载 jdk 到 /opt 目录下
-- 创建脚本文件：`vim /opt/jdk8-playbook.yml`
+- 创建脚本文件：`vim /opt/2-jdk8-playbook.yml`
 
 ```
 - hosts: all
@@ -193,7 +193,7 @@ ansible all -a 'ps'
 ```
 
 
-- 执行命令：`ansible-playbook /opt/jdk8-playbook.yml`
+- 执行命令：`ansible-playbook /opt/2-jdk8-playbook.yml`
 
 
 
