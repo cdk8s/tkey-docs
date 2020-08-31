@@ -38,7 +38,6 @@ ansible all -a 'ps'
 ```
 
 
-
 ## 基础设置
 
 - 禁用
@@ -78,13 +77,14 @@ ansible all -a 'ps'
       command: "{{ item }}"
       with_items:
          - yum install -y zip unzip lrzsz git wget htop deltarpm
-         
+
     - name: install zsh oh-my-zsh
       shell: "{{ item }}"
       with_items:
          - yum install -y zsh
+         - wget https://gitee.com/mirrors/oh-my-zsh/raw/master/tools/install.sh  -O - | sh
          - chsh -s /bin/zsh root
-         
+
     - name: install-vim
       shell: "{{ item }}"
       with_items:
