@@ -242,100 +242,116 @@ ansible all -a 'ps'
          
     - name: remove zip file
       file:
-        state: absent
         path: "{{ maven_install_folder }}/{{ file_name }}" 
+        state: absent
+
+    - name: create local_maven_repository directory
+      file:
+        path: /opt/local_maven_repository
+        state: directory
+
+    - name: remove old settings.xml
+      file:
+        path: {{ maven_install_folder }}/apache-maven-3.6.3/conf/settings.xml
+        state: absent
+
+    - name: create settings.xml file
+      file: 
+        path={{ maven_install_folder }}/apache-maven-3.6.3/conf/{{ item }}
+        state=touch
+        mode=777
+      with_items:
+        - settings.xml
+
+    - name: set settings.xml aliyun
+      blockinfile: 
+        path: {{ maven_install_folder }}/apache-maven-3.6.3/conf/settings.xml
+        marker: ""
+        block: |
+          <?xml version="1.0" encoding="UTF-8"?>
+          <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+          
+          
+              <localRepository>/opt/local_maven_repository</localRepository>
+          
+              <pluginGroups>
+              </pluginGroups>
+          
+              <proxies>
+              </proxies>
+          
+              <servers>
+              </servers>
+          
+              <profiles>
+                  <profile>
+                      <id>aliyun</id>
+                      <repositories>
+                          <repository>
+                              <id>aliyun</id>
+                              <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+                              <releases>
+                                  <enabled>true</enabled>
+                              </releases>
+                              <snapshots>
+                                  <enabled>true</enabled>
+                              </snapshots>
+                          </repository>
+                      </repositories>
+                      <pluginRepositories>
+                          <pluginRepository>
+                              <id>aliyun</id>
+                              <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+                              <releases>
+                                  <enabled>true</enabled>
+                              </releases>
+                              <snapshots>
+                                  <enabled>true</enabled>
+                              </snapshots>
+                          </pluginRepository>
+                      </pluginRepositories>
+                  </profile>
+                  <profile>
+                      <id>maven</id>
+                      <repositories>
+                          <repository>
+                              <id>maven</id>
+                              <url>https://repo.maven.apache.org/maven2/</url>
+                              <releases>
+                                  <enabled>true</enabled>
+                              </releases>
+                              <snapshots>
+                                  <enabled>true</enabled>
+                              </snapshots>
+                          </repository>
+                      </repositories>
+                      <pluginRepositories>
+                          <pluginRepository>
+                              <id>maven</id>
+                              <url>https://repo.maven.apache.org/maven2/</url>
+                              <releases>
+                                  <enabled>true</enabled>
+                              </releases>
+                              <snapshots>
+                                  <enabled>true</enabled>
+                              </snapshots>
+                          </pluginRepository>
+                      </pluginRepositories>
+                  </profile>
+              </profiles>
+          
+              <activeProfiles>
+                  <activeProfile>aliyun</activeProfile>
+              </activeProfiles>
+          
+          </settings>
+
 ```
 
 
 - 执行命令：`ansible-playbook /opt/maven-playbook.yml`
-
-```
-修改 Maven 源
-mkdir -p /data/local_maven_repository
-vim /usr/local/apache-maven-3.6.1/conf/settings.xml
-
-
-
-<?xml version="1.0" encoding="UTF-8"?>
-<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
-          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
-
-
-    <localRepository>/data/local_maven_repository</localRepository>
-
-    <pluginGroups>
-    </pluginGroups>
-
-    <proxies>
-    </proxies>
-
-    <servers>
-    </servers>
-
-    <profiles>
-        <profile>
-            <id>aliyun</id>
-            <repositories>
-                <repository>
-                    <id>aliyun</id>
-                    <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
-                    <releases>
-                        <enabled>true</enabled>
-                    </releases>
-                    <snapshots>
-                        <enabled>true</enabled>
-                    </snapshots>
-                </repository>
-            </repositories>
-            <pluginRepositories>
-                <pluginRepository>
-                    <id>aliyun</id>
-                    <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
-                    <releases>
-                        <enabled>true</enabled>
-                    </releases>
-                    <snapshots>
-                        <enabled>true</enabled>
-                    </snapshots>
-                </pluginRepository>
-            </pluginRepositories>
-        </profile>
-        <profile>
-            <id>maven</id>
-            <repositories>
-                <repository>
-                    <id>maven</id>
-                    <url>https://repo.maven.apache.org/maven2/</url>
-                    <releases>
-                        <enabled>true</enabled>
-                    </releases>
-                    <snapshots>
-                        <enabled>true</enabled>
-                    </snapshots>
-                </repository>
-            </repositories>
-            <pluginRepositories>
-                <pluginRepository>
-                    <id>maven</id>
-                    <url>https://repo.maven.apache.org/maven2/</url>
-                    <releases>
-                        <enabled>true</enabled>
-                    </releases>
-                    <snapshots>
-                        <enabled>true</enabled>
-                    </snapshots>
-                </pluginRepository>
-            </pluginRepositories>
-        </profile>
-    </profiles>
-
-    <activeProfiles>
-        <activeProfile>aliyun</activeProfile>
-    </activeProfiles>
-
-</settings>
-```
 
 
 
@@ -351,7 +367,7 @@ vim /usr/local/apache-maven-3.6.1/conf/settings.xml
       shell: yum remove -y nodejs npm
 
     - name: curl node
-      shell: "curl --silent --location https://rpm.nodesource.com/setup_10.x | sudo bash -"
+      shell: "curl --silent --location https://rpm.nodesource.com/setup_12.x | sudo bash -"
       
     - name: install node
       command: "{{ item }}"
