@@ -12,9 +12,18 @@
          - wget http://dev.mysql.com/get/mysql57-community-release-el7-11.noarch.rpm
          - yum localinstall -y mysql57-community-release-el7-11.noarch.rpm
 
-    - name: install mysql 2
+    - name : install mysql 2
       yum:
         name: mysql-community-server
+      async : 1000
+      poll : 0
+      register: mysql_install_result
+
+    - name: 'check install result'
+      async_status: jid={{ mysql_install_result.ansible_job_id }}
+      register: job_mysql_install_result
+      until: job_mysql_install_result.finished
+      retries: 250
 
     - name: remove old /etc/my.cnf
       file:
