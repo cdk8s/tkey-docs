@@ -16,14 +16,7 @@
 ## 安装后的检测
 
 ```
-docker --version
-docker-compose --version
-java -version
-mvn -v
-mysql --version
-redis-server --version
-node -v
-npm -v
+docker --version && docker-compose --version && java -version && mvn -v && mysql --version && redis-server --version && node -v && npm -v && nginx -V
 ```
 
 
