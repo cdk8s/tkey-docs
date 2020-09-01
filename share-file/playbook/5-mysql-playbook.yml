@@ -1,7 +1,7 @@
 - hosts: all
   remote_user: root
   tasks:
-    - name: remove the mariadb 
+    - name: remove the mariadb
       yum:
         name: mariadb
         state: absent
@@ -22,15 +22,14 @@
         state: absent
 
     - name: create my.cnf file
-      file: 
+      file:
         path="/etc/{{ item }}"
         state=touch
-        mode=777
       with_items:
         - my.cnf
 
     - name: set my.cnf
-      blockinfile: 
+      blockinfile:
         path: /etc/my.cnf
         marker: ""
         block: |
