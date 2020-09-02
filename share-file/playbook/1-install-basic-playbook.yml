@@ -4,7 +4,7 @@
     - name: Disable SELinux at next reboot
       selinux:
         state: disabled
-        
+
     - name: disable firewalld
       command: "{{ item }}"
       with_items:
@@ -13,12 +13,12 @@
          - echo "vm.swappiness = 0" >> /etc/sysctl.conf
          - swapoff -a
          - sysctl -w vm.swappiness=0
-         
+
     - name: install-epel
       command: "{{ item }}"
       with_items:
          - yum install -y epel-release
-         
+
     - name: install-basic
       command: "{{ item }}"
       with_items:
@@ -31,12 +31,31 @@
          - wget https://gitee.com/mirrors/oh-my-zsh/raw/master/tools/install.sh  -O - | sh
          - chsh -s /bin/zsh root
 
+    - name: install zsh plugin
+      shell: "{{ item }}"
+      with_items:
+        - git clone https://github.com/zsh-users/zsh-autosuggestions.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+        - git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+
+    - name: replace zshrc theme
+      lineinfile:
+        path: /root/.zshrc
+        regexp: '^ZSH_THEME='
+        line: ZSH_THEME="af-magic"
+
+    - name: replace zshrc plugins
+      lineinfile:
+        path: /root/.zshrc
+        regexp: '^plugins='
+        line: plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
+
+
     - name: install-vim
       shell: "{{ item }}"
       with_items:
          - yum install -y vim
          - curl https://raw.githubusercontent.com/wklken/vim-for-server/master/vimrc > ~/.vimrc
-         
+
     - name: install-docker
       shell: "{{ item }}"
       with_items:
@@ -52,7 +71,7 @@
         state: directory
 
     - name: create daemon.json file
-      file: 
+      file:
         path=/etc/docker/{{ item }}
         state=touch
         mode=777
@@ -60,7 +79,7 @@
         - daemon.json
 
     - name: set docker registry mirrors
-      blockinfile: 
+      blockinfile:
         path: /etc/docker/daemon.json
         marker: ""
         block: |
