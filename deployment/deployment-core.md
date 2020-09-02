@@ -12,7 +12,6 @@
 	- 重启防火墙：`firewall-cmd --reload`
 - CentOS 7 命令：`systemctl restart sshd.service`
 
-
 ## 安装后的检测
 
 ```
@@ -33,6 +32,7 @@ docker --version && docker-compose --version && java -version && mvn -v && mysql
 - CentOS：`sudo yum install -y ansible`
 	- 查看版本：`ansible --version`
 - 编辑配置文件：`vim /etc/ansible/hosts`，在文件尾部添加：
+- 查看自己的内网 ip：`ifconfig`，假设是：172.16.16.4
 
 ```
 [local]
