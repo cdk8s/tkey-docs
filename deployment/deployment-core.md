@@ -158,6 +158,7 @@ ansible all -a 'ps'
 
 - 下载 jdk 到 /opt 目录下
 - 创建脚本文件：`vim /opt/2-jdk8-playbook.yml`
+- 如果公司重视许可证，建议使用 u202版本或者最新的adoptopenjdk。
 
 ```
 - hosts: all
